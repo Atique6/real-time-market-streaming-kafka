@@ -1,42 +1,41 @@
-# Real-Time Tracking Pipeline (Kafka + PostgreSQL + Python)
+# Real-Time Market Streaming Pipeline (Kafka + PostgreSQL + Python)
 
-## 1️⃣ Requirements
-- PostgreSQL installed (must be running)
-- Python 3 + pip + venv
-- Kafka (included in folder `2kafka/kafka_2.13-4.1.0.tgz`)
-- macOS / Linux terminal
+## Requirements
+- PostgreSQL installed and running
+- Python 3 with pip and venv
+- Kafka (not included in this repo due to GitHub file size limits)
+- macOS or Linux terminal
 
 ---
 
-## 2️⃣ Project Structure
+## Project Structure
 ```
 src/
 ├── 0dbInit/
-│   └── dbInit.py
+│ └── dbInit.py
 ├── 1producers/
-│   ├── binanceProducer.py
-│   ├── fakeStockProducer.py
+│ ├── binanceProducer.py
+│ ├── fakeStockProducer.py
 ├── 2kafka/
-│   ├── kafka_2.13-4.1.0.tgz
-│   └── versions.txt
+│ └── versions.txt
 ├── 3consumers/
-│   ├── AtiqueConsumer.py
-│   ├── binanceConsumer.py
-│   └── fakeStockConsumer.py
+│ ├── AtiqueConsumer.py
+│ ├── binanceConsumer.py
+│ └── fakeStockConsumer.py
 ├── 4postgres/
-│   └── tradeDBSample.sql
+│ └── tradeDBSample.sql
 ├── 6DashboardOrNotifier/
-│   └── Dashboard.py
+│ └── Dashboard.py
 └── websockets/
-    └── sample.py
+└── sample.py
 ```
 
 ---
 
-## 3️⃣ Step 1 — Start PostgreSQL
+## Step 1 Start PostgreSQL
 Make sure PostgreSQL is running.
 
-Default connection used:
+Default connection used by consumers:
 ```
 DB_NAME = trades
 DB_USER = postgres
@@ -47,7 +46,7 @@ DB_PORT = 5432
 
 ---
 
-## 4️⃣ Step 2 — Initialize Database Tables
+## Step 2 Initialize database tables
 From the `src` folder:
 ```bash
 cd src
@@ -61,12 +60,12 @@ This creates:
 
 ---
 
-## Step 3 — Download & Start Kafka
+## Step 3 Download and start Kafka
 
-Kafka is **NOT included** in this repo (GitHub file-size limit).  
+Kafka is **NOT included** in this repo due to GitHub file size limits.  
 You must download it manually.
 
-### 1️⃣ Download Kafka
+### 1 Download Kafka
 Go to:
 
 https://kafka.apache.org/downloads
@@ -74,35 +73,35 @@ https://kafka.apache.org/downloads
 Download the **Binary**:
 - `kafka_2.13-4.1.1.tgz`
 
-### 2️⃣ Move it into the project
+### 2 Move it into the project
 Place the file here: 
 src/2kafka/kafka_2.13-4.1.1.tgz
 
 
-### 3️⃣ Extract Kafka and run
+### 3 Extract Kafka
 ```bash
 cd src/2kafka
-tar -xvf kafka_2.13-4.1.0.tgz
-cd kafka_2.13-4.1.0
+tar -xvf kafka_2.13-4.1.1.tgz
+cd kafka_2.13-4.1.1
 ```
 
-Format storage (KRaft mode):
+### 4 Start ZooKeeper (Terminal 1)
 ```bash
-bin/kafka-storage.sh format -t $(uuidgen) -c config/kraft/server.properties --standalone
+bin/zookeeper-server-start.sh config/zookeeper.properties
 ```
 
-Start Kafka:
+### 5 Start Kafka broker (Terminal 2)
 ```bash
 bin/kafka-server-start.sh config/server.properties
 ```
 
 ---
 
-## 6️⃣ Step 4 — Create Topics
-In another terminal:
+## Step 4 Create Kafka topics
+Open a new terminal and run:
 
 ```bash
-cd src/2kafka/kafka_2.13-4.1.0
+cd src/2kafka/kafka_2.13-4.1.1
 
 bin/kafka-topics.sh --bootstrap-server localhost:9092 --create \
   --topic fakestock --partitions 10 --replication-factor 1
@@ -113,7 +112,7 @@ bin/kafka-topics.sh --bootstrap-server localhost:9092 --create \
 
 ---
 
-## 7️⃣ Step 5 — Start Consumers
+## Step 5 Start consumers
 From `src`:
 
 ```bash
@@ -123,7 +122,7 @@ python 3consumers/fakeStockConsumer.py
 
 ---
 
-## 8️⃣ Step 6 — Start Producers
+## Step 6 Start producers
 In separate terminals:
 
 ```bash
@@ -133,7 +132,7 @@ python 1producers/fakeStockProducer.py
 
 ---
 
-## 9️⃣ Step 7 — Start Dashboard
+## Step 7 Start dashboard
 From `src`:
 
 ```bash
@@ -147,13 +146,6 @@ http://127.0.0.1:8050
 
 ---
 
-## ✔️ Pipeline is now fully running
-- WebSocket → Kafka → Consumers → PostgreSQL → Dashboard  
-- Fake stocks used for testing  
-- Binance stream used for real-time market data  
-
----
-
-# real-time-market-streaming-kafka
-Real-time crypto streaming pipeline with Kafka, PostgreSQL, and EWMA-based alerting.
- 857ba4b7594f5c4fde0031683aa573c29d715d06
+## Pipeline summary
+WebSocket to Kafka to Consumers to PostgreSQL to Dashboard
+Alerts are generated using EWMA volatility baselines and stored in PostgreSQL
