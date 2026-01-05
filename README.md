@@ -1,4 +1,4 @@
-# Real-Time Market Streaming Pipeline (Kafka + PostgreSQL + Python)
+# Real-Time Crypto Market Streaming Pipeline (Kafka + PostgreSQL + Python)
 
 ## Requirements
 - PostgreSQL installed and running
