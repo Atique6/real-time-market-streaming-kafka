@@ -153,3 +153,7 @@ http://127.0.0.1:8050
 - Binance stream used for real-time market data  
 
 ---
+
+# real-time-market-streaming-kafka
+Real-time crypto streaming pipeline with Kafka, PostgreSQL, and EWMA-based alerting.
+ 857ba4b7594f5c4fde0031683aa573c29d715d06
