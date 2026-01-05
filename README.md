@@ -147,5 +147,6 @@ http://127.0.0.1:8050
 ---
 
 ## Pipeline summary
-WebSocket to Kafka to Consumers to PostgreSQL to Dashboard
-Alerts are generated using EWMA volatility baselines and stored in PostgreSQL
+- WebSocket → Kafka → Consumers → PostgreSQL → Dashboard
+- Binance stream used for real-time market data
+- Alerts are generated using EWMA volatility baselines and stored in PostgreSQL
