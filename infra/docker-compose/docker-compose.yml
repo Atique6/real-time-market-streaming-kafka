@@ -19,5 +19,3 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     depends_on:
       - zookeeper
-
-# this does not make 100 sense to have 2kafka liek this stateless = L
